@@ -46,8 +46,7 @@ def check_log_entry_dashboard_page(context, log_type, action, time_entry, page, 
     else:
         _, container = get_page_element(context, page + 's', page)
         container_shadow = expand_shadow_root(context, container)
-        resource_logs = container_shadow.find_element_by_class_name(page + '-logs')
-        logs_list = resource_logs.find_element_by_tag_name('mist-list')
+        logs_list = container_shadow.find_element_by_id(page + 'Logs')
         logs_shadow_root  = expand_shadow_root(context, logs_list)
 
     grid = logs_shadow_root.find_element_by_id('grid')
@@ -64,10 +63,11 @@ def check_log_entry_dashboard_page(context, log_type, action, time_entry, page, 
     assert False, "Not found!"
 
 
+# create_network log failure
+
 # request and observation log in single cloud page
 # cleanup logs
 ####################################################
 # observation log create_machine 'Docker' : remove
 # check ec2
 # check meta apo enable cloud
-####################################################
