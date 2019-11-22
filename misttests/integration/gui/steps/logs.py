@@ -3,7 +3,7 @@ from behave import step, then
 from time import time
 from time import sleep
 
-from .utils import expand_shadow_root
+from .utils import expand_shadow_root, get_page_element
 
 @step(u'the log entry in position {position} should have been added "{time_entry}"')
 def check_log_main_page(context, position, time_entry):
@@ -32,17 +32,25 @@ def check_log_main_page(context, position, time_entry):
     assert time_entry in log_el_text, msg
 
 
-@step(u'I should see a(n) "{log_type}" log entry of action "{action}" added "{time_entry}" in the dashboard page within {timeout} seconds')
-def check_log_entry_dashboard_page(context, log_type, action, time_entry, timeout):
-    mist_app = context.browser.find_element_by_tag_name('mist-app')
-    mist_app_shadow = expand_shadow_root(context, mist_app)
-    mist_header = mist_app_shadow.find_element_by_tag_name('app-header-layout')
-    iron_pages = mist_header.find_element_by_id('iron-pages')
-    pg_dashboard = iron_pages.find_element_by_tag_name('page-dashboard')
-    pg_dash_shadow = expand_shadow_root(context, pg_dashboard)
-    logs = pg_dash_shadow.find_element_by_id('logs')
-    logs_shadow = expand_shadow_root(context, logs)
-    grid = logs_shadow.find_element_by_id('grid')
+@step(u'I should see a(n) "{log_type}" log entry of action "{action}" added "{time_entry}" in the "{page}" page within {timeout} seconds')
+def check_log_entry_dashboard_page(context, log_type, action, time_entry, page, timeout):
+    if page in ['dashboard']:
+        mist_app = context.browser.find_element_by_tag_name('mist-app')
+        mist_app_shadow = expand_shadow_root(context, mist_app)
+        mist_header = mist_app_shadow.find_element_by_tag_name('app-header-layout')
+        iron_pages = mist_header.find_element_by_id('iron-pages')
+        pg_dashboard = iron_pages.find_element_by_tag_name('page-dashboard')
+        pg_dash_shadow = expand_shadow_root(context, pg_dashboard)
+        logs = pg_dash_shadow.find_element_by_id('logs')
+        logs_shadow_root = expand_shadow_root(context, logs)
+    else:
+        _, container = get_page_element(context, page + 's', page)
+        container_shadow = expand_shadow_root(context, container)
+        resource_logs = container_shadow.find_element_by_class_name(page + '-logs')
+        logs_list = resource_logs.find_element_by_tag_name('mist-list')
+        logs_shadow_root  = expand_shadow_root(context, logs_list)
+
+    grid = logs_shadow_root.find_element_by_id('grid')
     grid_shadow = expand_shadow_root(context, grid)
     table = grid_shadow.find_element_by_id('table')
     items = table.find_element_by_id('items')
@@ -56,10 +64,7 @@ def check_log_entry_dashboard_page(context, log_type, action, time_entry, timeou
     assert False, "Not found!"
 
 
-# request and observation log in single network page
-
 # request and observation log in single cloud page
-
 # cleanup logs
 ####################################################
 # observation log create_machine 'Docker' : remove
