@@ -57,13 +57,12 @@ def check_log_entry_dashboard_page(context, log_type, action, time_entry, timeou
 
 
 # request and observation log in single network page
+
 # request and observation log in single cloud page
+
+# cleanup logs
 ####################################################
 # observation log create_machine 'Docker' : remove
-# cleanup logs
 # check ec2
+# check meta apo enable cloud
 ####################################################
-# observation logs in mp-tests
-
-# machine info machines page
-# machine info in single page
