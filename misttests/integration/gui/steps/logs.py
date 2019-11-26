@@ -61,13 +61,3 @@ def check_log_entry_dashboard_page(context, log_type, action, time_entry, page, 
                 return
 
     assert False, "Not found!"
-
-
-# create_network log failure
-
-# request and observation log in single cloud page
-# cleanup logs
-####################################################
-# observation log create_machine 'Docker' : remove
-# check ec2
-# check meta apo enable cloud
